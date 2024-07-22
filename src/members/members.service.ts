@@ -19,7 +19,7 @@ export class MembersService {
     return this.membersRepository.save(member);
   }
 
-  async findAll(): Promise<Member> {
+  async findAll(): Promise<Member[]> {
     return this.membersRepository.find();
   }
 
