@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { Length } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Member } from'../../members/entities/member.entity';
 
 @Entity()
 export class Task {
@@ -7,7 +7,6 @@ export class Task {
   id: number;
 
   @Column({nullable: false, length: 50})
-  @Length(5)
   name: string;
 
   @Column({ length: 140 })
@@ -21,4 +20,7 @@ export class Task {
 
   @Column({ nullable: false, default: 'Baixa' })
   priority: 'Baixa' | 'Média' | 'Alta';
+
+  @ManyToOne(() => Member, member => member.tasks, {onDelete: 'CASCADE'})
+  member: Member
 }

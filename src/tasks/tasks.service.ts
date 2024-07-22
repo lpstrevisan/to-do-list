@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,26 +9,43 @@ import { Task } from './entities/task.entity';
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private taskRepository: Repository<Task>
+    private readonly taskRepository: Repository<Task>
   ) {}
 
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  async create(createTaskDto: CreateTaskDto, memberId: number): Promise<Task> {
+    const task = this.taskRepository.create({
+      ...createTaskDto,
+      member: { id: memberId},
+      finished: false
+    });
+    return this.taskRepository.save(task);
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAll(memberId: number): Promise<Task[]> {
+    return this.taskRepository.find({ where: { member: { id: memberId}}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: number, memberId: number): Promise<Task> {
+    const task = await this.taskRepository.findOne({ where: { id, member: { id: memberId } } });
+    if (!task) {
+      throw new NotFoundException('Task not found');
+    }
+    return task;
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: number, updateTaskDto: UpdateTaskDto, memberId: number): Promise<Task> {
+    const task = await this.findOne(id, memberId);
+
+    if (task.finished) {
+      throw new ForbiddenException('Cannot edit a finalized task');
+    }
+
+    Object.assign(task, updateTaskDto);
+    return this.taskRepository.save(task);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: number, memberId: number): Promise<void> {
+    const task = await this.findOne(id, memberId);
+    await this.taskRepository.remove(task);
   }
 }
