@@ -1,4 +1,6 @@
-import { IsBoolean, IsDate, IsEnum, isNotEmpty, IsNotEmpty, IsOptional, Length, MaxLength } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, Length, MaxLength } from "class-validator";
+import { Member } from "src/members/entities/member.entity";
+import { Priority } from "../entities/task.entity";
 
 export class CreateTaskDto {
   @IsNotEmpty()
@@ -16,7 +18,10 @@ export class CreateTaskDto {
   @IsDate()
   finishDate: Date;
 
+  @IsEnum(Priority)
   @IsNotEmpty()
-  @IsEnum(['Baixa', 'Média', 'Alta'])
-  priority: string;
+  priority: Priority;
+
+  @IsNotEmpty()
+  member: Member;
 }
