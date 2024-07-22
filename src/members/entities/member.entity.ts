@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Length } from 'class-validator';
+import { Task } from '../../tasks/taks.entity'
 
 @Entity()
 export class Member {
@@ -10,6 +10,8 @@ export class Member {
   email: string;
 
   @Column({ nullable: false })
-  @Length(5)
   name: string;
+
+  @OneToMany(() => Task, task => task.member)
+  tasks: Task[];
 }

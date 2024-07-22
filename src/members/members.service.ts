@@ -12,23 +12,30 @@ export class MembersService {
     private membersRepository: Repository<Member>
   ) {}
   
-  create(createMemberDto: CreateMemberDto) {
-    return 'This action adds a new member';
+  async create(createMemberDto: CreateMemberDto): Promise<Member> {
+    const member = this.membersRepository.create({
+      ...createMemberDto,
+    });
+    return this.membersRepository.save(member);
   }
 
-  findAll() {
-    return `This action returns all members`;
+  async findAll(): Promise<Member> {
+    return this.membersRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} member`;
+  async findOne(id: number): Promise<Member> {
+    return this.membersRepository.findOne({ where: { id }});
   }
 
-  update(id: number, updateMemberDto: UpdateMemberDto) {
-    return `This action updates a #${id} member`;
+  async update(id: number, updateMemberDto: UpdateMemberDto): Promise<Member> {
+    const member = await this.findOne(id);
+
+    Object.assign(member, updateMemberDto);
+    return this.membersRepository.save(member);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} member`;
+  async remove(id: number): Promise<void> {
+    const member = await this.findOne(id);
+    await this.membersRepository.remove(member);
   }
 }
