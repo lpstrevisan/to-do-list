@@ -1,6 +1,6 @@
 import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsOptional, Length, MaxLength } from "class-validator";
 import { Member } from "src/members/entities/member.entity";
-import { Priority } from "../entities/task.entity";
+import { Priority } from '../../enums/task-priority.enum';
 
 export class CreateTaskDto {
   @IsNotEmpty()
