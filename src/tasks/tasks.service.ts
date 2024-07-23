@@ -12,10 +12,9 @@ export class TasksService {
     private readonly taskRepository: Repository<Task>
   ) {}
 
-  async create(createTaskDto: CreateTaskDto, memberId: number): Promise<Task> {
+  async create(createTaskDto: CreateTaskDto): Promise<Task> {
     const task = this.taskRepository.create({
       ...createTaskDto,
-      member: { id: memberId},
       finished: false
     });
     return this.taskRepository.save(task);
@@ -25,7 +24,7 @@ export class TasksService {
     return this.taskRepository.find({ where: { member: { id: memberId}}});
   }
 
-  async findOne(id: number, memberId: number): Promise<Task> {
+  async findOne(memberId: number, id: number): Promise<Task> {
     const task = await this.taskRepository.findOne({ where: { id, member: { id: memberId } } });
     if (!task) {
       throw new NotFoundException('Task not found');
@@ -33,7 +32,7 @@ export class TasksService {
     return task;
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto, memberId: number): Promise<Task> {
+  async update(memberId: number, id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const task = await this.findOne(id, memberId);
 
     if (task.finished) {
@@ -44,8 +43,8 @@ export class TasksService {
     return this.taskRepository.save(task);
   }
 
-  async remove(id: number, memberId: number): Promise<void> {
-    const task = await this.findOne(id, memberId);
+  async remove(memberId: number, id: number): Promise<void> {
+    const task = await this.findOne(memberId, id);
     await this.taskRepository.remove(task);
   }
 }

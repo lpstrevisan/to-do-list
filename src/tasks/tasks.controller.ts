@@ -8,27 +8,27 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto, @Req() req) {
-    return this.tasksService.create(createTaskDto, req.member.id);
+  create(@Body() createTaskDto: CreateTaskDto) {
+    return this.tasksService.create(createTaskDto);
   }
 
-  @Get()
-  findAll(@Req() req) {
-    return this.tasksService.findAll(req.member.id);
+  @Get(':memberId')
+  findAll(@Param('memberId') memberId: string) {
+    return this.tasksService.findAll(+memberId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string, @Req() req) {
-    return this.tasksService.findOne(+id, req.member.id);
+  @Get(':memberId/:id')
+  findOne(@Param('memberId') MemberId: string, @Param('id') id: string) {
+    return this.tasksService.findOne(+id, +MemberId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto, @Req() req) {
-    return this.tasksService.update(+id, updateTaskDto, req.member.id);
+  @Patch(':memberId/:id')
+  update(@Param('memberId') memberId: string, @Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.tasksService.update(+memberId, +id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req) {
-    return this.tasksService.remove(+id, req.member.id);
+  remove(@Param('memberId') memberId: string, @Param('id') id: string) {
+    return this.tasksService.remove(+memberId, +id);
   }
 }
