@@ -2,9 +2,9 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Member } from'../../members/entities/member.entity';
 
 export enum Priority {
-  BAIXA = "Baixa",
-  MEDIA = "Média",
-  ALTA = "Alta",
+  "Baixa",
+  "Média",
+  "Alta",
 }
 
 @Entity()
@@ -27,7 +27,7 @@ export class Task {
   @Column({ nullable: false,
             type: "enum",
             enum: Priority,
-            default: Priority.BAIXA 
+            default: Priority.Baixa
           })
   priority: Priority;
 
