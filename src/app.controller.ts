@@ -13,4 +13,8 @@ export class AppController {
   @Get('/register')
   @Render('register-member')
   registerMember() {}
+
+  @Get('/:memberId/new-task')
+  @Render('register-task')
+  registerTask() {}
 }
