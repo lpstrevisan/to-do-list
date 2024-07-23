@@ -20,14 +20,14 @@ export class TasksService {
     return this.taskRepository.save(task);
   }
 
-  async findAll(memberId: number): Promise<Task[]> {
-    return this.taskRepository.find({ where: { member: { id: memberId}}});
+  async findAll(): Promise<Task[]> {
+    return this.taskRepository.find();
   }
 
   async findOne(memberId: number, id: number): Promise<Task> {
     const task = await this.taskRepository.findOne({ where: { id, member: { id: memberId } } });
     if (!task) {
-      throw new NotFoundException('Task not found');
+      throw new NotFoundException('Tarefa não encontrada');
     }
     return task;
   }
@@ -36,7 +36,7 @@ export class TasksService {
     const task = await this.findOne(id, memberId);
 
     if (task.finished) {
-      throw new ForbiddenException('Cannot edit a finalized task');
+      throw new ForbiddenException('Não é possível editar uma tarefa finalizada');
     }
 
     Object.assign(task, updateTaskDto);

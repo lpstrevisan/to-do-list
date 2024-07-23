@@ -12,14 +12,14 @@ export class TasksController {
     return this.tasksService.create(createTaskDto);
   }
 
-  @Get(':memberId')
-  findAll(@Param('memberId') memberId: string) {
-    return this.tasksService.findAll(+memberId);
+  @Get()
+  findAll() {
+    return this.tasksService.findAll();
   }
 
   @Get(':memberId/:id')
   findOne(@Param('memberId') MemberId: string, @Param('id') id: string) {
-    return this.tasksService.findOne(+id, +MemberId);
+    return this.tasksService.findOne(+MemberId, +id);
   }
 
   @Patch(':memberId/:id')
