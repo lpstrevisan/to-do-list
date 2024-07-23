@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Member } from'../../members/entities/member.entity';
-import { Priority } from 'src/enums/task-priority.enum';
+import { Priority } from '../../enums/task-priority.enum';
 
 @Entity()
 export class Task {
