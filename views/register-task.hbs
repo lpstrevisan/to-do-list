@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Tarefa</title>
+</head>
+<body>
+  <form id="register-task-form">
+    <input type="text" id="name" placeholder="Nome da Tarefa" required>
+    <textarea id="description" placeholder="Descrição"></textarea>
+    <select id="priority">
+      <option value="Baixa">Baixa</option>
+      <option value="Média">Média</option>
+      <option value="Alta">Alta</option>
+    </select>
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <script>
+    document.getElementById('register-task-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const description = document.getElementById('description').value;
+      const priority = document.getElementById('priority').value;
+
+      const response = await fetch('http://localhost:3000/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description, priority }),
+      });
+
+      const data = await response.json();
+      if (data.id) {
+        alert('Tarefa cadastrada com sucesso');
+        window.location.href = 'home.html';
+      } else {
+        alert('Falha no cadastro');
+      }
+    });
+  </script>
+</body>
+</html>
